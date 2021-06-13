@@ -1,0 +1,23 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 20px;
+  .main {
+    display: flex;
+    text-align: left;
+    padding: 20px 0 10px 0;
+
+    .writing {
+      width: 60%;
+    }
+    .preview {
+      width: 40%;
+      .box {
+        min-height: 370px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
+    }
+  }
+}

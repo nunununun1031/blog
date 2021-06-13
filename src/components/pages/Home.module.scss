@@ -1,3 +1,21 @@
 .root {
-  color: red;
+  margin: 0;
+
+  .container {
+    height: 92vh;
+    display: flex;
+    justify-content: space-around;
+    // background: #f5f5f5;
+    background: pink;
+    padding: 10px 0 10px 0;
+
+    .card {
+      height: 20%;
+      min-height: 250px;
+      max-width: 300px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+  }
 }

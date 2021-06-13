@@ -1,0 +1,23 @@
+.article {
+  min-height: 92vh;
+  background: pink;
+  padding: 10px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  color: #8d8d8d;
+
+  .text {
+    width: 70%;
+    min-height: 500px;
+    border: #e0e0e0 1px solid;
+    text-align: left;
+  }
+  .action {
+    width: 40%;
+    display: flex;
+    justify-content: space-between;
+  }
+}
