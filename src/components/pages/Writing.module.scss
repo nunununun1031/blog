@@ -2,11 +2,12 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding-top: 20px;
+  padding: 20px 10px 0 10px;
   .main {
     display: flex;
     text-align: left;
     padding: 20px 0 10px 0;
+    color: #797979;
 
     .writing {
       width: 60%;
@@ -20,4 +21,8 @@
       }
     }
   }
+}
+.button {
+  padding-right: 10px;
+  text-align: right;
 }

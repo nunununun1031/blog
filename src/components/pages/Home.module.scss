@@ -2,20 +2,16 @@
   margin: 0;
 
   .container {
-    height: 92vh;
+    min-height: 92vh;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     // background: #f5f5f5;
     background: pink;
     padding: 10px 0 10px 0;
 
-    .card {
-      height: 20%;
-      min-height: 250px;
-      max-width: 300px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+    .left {
+      width: 25%;
+      background: rgb(42, 138, 42);
     }
   }
 }

@@ -1,6 +1,8 @@
-export const article = [
+import { nanoid } from "nanoid";
+
+export const articles = [
   {
-    id: 1,
+    id: nanoid(),
     img: "",
     title: "初めまして！",
     text: "初めましてこんにちは！ぬぬぬぬんです。",
@@ -9,7 +11,7 @@ export const article = [
     good: 0,
   },
   {
-    id: 2,
+    id: nanoid(),
     img: "",
     title: "React入門",
     text: "こんにちは！今日はReactでTodoアプリをつくります！",
@@ -18,7 +20,7 @@ export const article = [
     good: 0,
   },
   {
-    id: 3,
+    id: nanoid(),
     img: "",
     title: "Redux入門",
     text: "こんにちは！今日はReduxを使ってみましょう！",

@@ -1,9 +1,9 @@
 export interface Article {
-  id: number;
+  id: string;
   img: string;
   title: string;
   text: string;
-  timeStamp: string;
+  createdAt: string | (() => string);
   updateTime: string;
   good: number;
 }
