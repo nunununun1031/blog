@@ -6,7 +6,7 @@ import SimpleMDE from "react-simplemde-editor";
 import "easymde/dist/easymde.min.css";
 import marked from "marked";
 import { useDispatch, useSelector } from "react-redux";
-import { addArticle, handleEdit, selectEdit, selectSelectedItems, updateArticle } from "../../features/article/articleSlice";
+import { postArticle, selectEdit, selectSelectedItems, updatePost } from "../../features/article/articleSlice";
 import { useHistory } from "react-router-dom";
 
 const Writing = () => {
@@ -19,32 +19,23 @@ const Writing = () => {
   const [title, setTitle] = useState(edit ? selectedArticle.title : "");
   const [img, setImg] = useState(edit ? selectedArticle.img : "");
 
-  const pushArticle = () => {
+  const plusArticle = async() => {
 
-    // 選択記事がある（編集状態）の時は編集したデータを更新
+    // editがTrue(編集状態)の時は編集したデータを更新
     if(edit) {
       const sendData = {...selectedArticle, title: title, text: markdown, img: img}
-      dispatch(updateArticle(sendData));
-      setMarkdown("")
-      setTitle("")
-      setImg("")
-      dispatch(handleEdit(false))
-      history.push("/");
-    // 新規投稿の場合は記事を追加する
+      await dispatch(updatePost(sendData));
+    // editがfalse(新規投稿)の場合は記事を追加する
     } else {
-      dispatch(addArticle({
+      await dispatch(postArticle({
         img: img,
         title: title,
-        text: markdown,
-      }));
-      setMarkdown("")
-      setTitle("")
-      setImg("")
-      history.push("/");
+        markdown: markdown,
+      }))
     }
-  };
-
-  const goHome = () => {
+    setMarkdown("")
+    setTitle("")
+    setImg("")
     history.push("/");
   };
 
@@ -76,11 +67,10 @@ const Writing = () => {
         variant="contained" 
         color="primary" 
         disabled={title.trim().length === 0 || markdown.trim().length === 0} 
-        onClick={pushArticle}>
+        onClick={plusArticle}>
           {edit ? "記事を更新する" : "記事を投稿する"}
         </Button>
       </div>
-      <button onClick={goHome}>ホームへ</button>
     </div>
   );
 };

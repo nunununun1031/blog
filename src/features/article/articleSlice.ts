@@ -1,48 +1,25 @@
-import { createSlice } from "@reduxjs/toolkit";
-// import { RootState } from "../../app/store";
-// import { articles } from "../../data/articles";
+import { createSlice,createAsyncThunk } from "@reduxjs/toolkit";
 import { Article } from "../../types/article";
-// import { fetchCount } from './counterAPI';
 import { nanoid } from "nanoid";
+import axios from "axios";
 
 export interface ArticleState {
   items: Array<Article>;
   selectedItem: Article;
   isModalOpen: boolean;
-  isAdmin: boolean;
   isEdit: boolean;
+}
+type AddProps = {
+  markdown: string;
+  title: string;
+  img: string;
+}
+type deleteProps = {
+  id: string;
 }
 
 const initialState: ArticleState = {
-  items: [
-    {
-      id: nanoid(),
-      img: "",
-      title: "初めまして！",
-      text: "初めましてこんにちは！ぬぬぬぬんです。",
-      createdAt: "",
-      updateTime: "",
-      good: 0,
-    },
-    {
-      id: nanoid(),
-      img: "",
-      title: "React入門",
-      text: "こんにちは！今日はReactでTodoアプリをつくります！",
-      createdAt: "",
-      updateTime: "",
-      good: 0,
-    },
-    {
-      id: nanoid(),
-      img: "",
-      title: "Redux入門",
-      text: "こんにちは！今日はReduxを使ってみましょう！",
-      createdAt: "",
-      updateTime: "",
-      good: 0,
-    },
-  ],
+  items: [],
   selectedItem:{
     id: "",
     img: "",
@@ -53,68 +30,122 @@ const initialState: ArticleState = {
     good: 0,
   },
   isModalOpen: false,
-  isAdmin: false,
   isEdit: false,
 };
+// json-serverからデータを取得
+export const getArticle = createAsyncThunk(
+  'article/getArticle',
+  async () => {
+    const response = await axios.get<Article[]>("http://localhost:3001/items");
+    // return {responseItems: response};
+    return response.data;
+  }
+);
+// json-serverにデータを追加
+export const postArticle = createAsyncThunk(
+  'article/postArticle',
+  async (value:AddProps) => {
+    const {img, markdown, title} = value
+    const newArticle = {
+      id: nanoid(),
+      img: img,
+      title: title,
+      text: markdown,
+      createdAt: "",
+      updateTime: "",
+      good: 0,
+    }
+    const response = await axios.post("http://localhost:3001/items", newArticle)
+    .catch((error) => {
+      throw error;
+    });
+    return response.data;
+  }
+);
+// json-server上のデータを削除
+export const deletePost = createAsyncThunk(
+  "article/deleteArticle",
+  async(id:deleteProps) => {
+    const response = await axios.delete(`http://localhost:3001/items/${id}`)
+    return response.data;
+  }
+)
+// json-serverのデータをアップデート
+export const updatePost = createAsyncThunk("article/updateArticle", async(art:Article) => {
+  const response = await axios.put(`http://localhost:3001/items/${art.id}`, art)
+  return response.data;
+})
+
+// いいね数の管理
+export const goodCountUp = createAsyncThunk("article/goodCount", async(art: Article) => {
+  const response = await axios.patch(`http://localhost:3001/items/${art.id}`, {good: art.good + 1})
+  return response.data;
+})
 
 export const articleSlice = createSlice({
   name: "article",
   initialState,
   reducers: {
-    addArticle: (state, action) => {
-      const newArticle = {
-        id: nanoid(),
-        img: action.payload.img,
-        title: action.payload.title,
-        text: action.payload.text,
-        createdAt: "",
-        updateTime: "",
-        good: 0,
-      };
-      state.items = [...state.items, newArticle];
-    },
-    deleteArticle: (state, action) => {
-      console.log(action.payload)
-      state.items = state.items.filter((item) => item.id !== action.payload);
-    },
-    updateArticle: (state, action) => {
-      console.log(action.payload)
-      const item = state.items.find((item) => item.id === action.payload.id);
-      if(item) {
-        item.title = action.payload.title;
-        item.text = action.payload.text;
-        item.img = action.payload.img;
-      }
-    },
     selectArticle: (state, action) => {
       state.selectedItem = {...action.payload}
     },
-    countUp: (state, action) => {
-      const countItem = state.items.find((item) => item.id === action.payload);
-      if (countItem) {
-        countItem.good++;
-      }
-    },
     handleModalOpen: (state, action) => {
       state.isModalOpen = action.payload;
-    },
-    handleIsAdmin: (state, action) => {
-      state.isAdmin = action.payload;
     },
     handleEdit: (state, action) => {
       state.isEdit = action.payload;
     },
   },
+  extraReducers:(builder) => {
+    builder
+    .addCase(getArticle.fulfilled, (state, action) => {
+      state.items = action.payload
+    })
+    .addCase(postArticle.fulfilled, (state, action) => {
+      return {
+        ...state,
+        items: [action.payload, ...state.items],
+      }
+
+    })
+    .addCase(deletePost.fulfilled, (state, action) => {
+      return {
+        ...state,
+        items: state.items.filter((t) => t.id !== action.payload.id),
+        selectedItem: {
+          id: "",
+          img: "",
+          title: "",
+          text: "",
+          createdAt: "",
+          updateTime: "",
+          good: 0,
+        },
+      }
+    })
+    .addCase(updatePost.fulfilled, (state, action) => {
+      return {
+        ...state,
+        items: state.items.map((a) => 
+          a.id === action.payload.id ? action.payload : a
+        ),
+        selectedItem: action.payload,
+      }
+    })
+    .addCase(goodCountUp.fulfilled, (state, action) => {
+      return {
+        ...state,
+        items: state.items.map((a) => 
+          a.id === action.payload.id ? action.payload : a
+        )
+      }
+    })
+  },
 });
 
 export const {
-  addArticle,
-  deleteArticle,
-  updateArticle,
   selectArticle,
-  countUp,
   handleModalOpen,
-  handleIsAdmin,
   handleEdit,
 } = articleSlice.actions;
 

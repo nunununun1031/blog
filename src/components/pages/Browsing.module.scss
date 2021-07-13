@@ -1,8 +1,6 @@
 .article {
   min-height: 92vh;
-  background: pink;
   padding: 10px;
-
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -12,6 +10,7 @@
   .text {
     width: 70%;
     min-height: 500px;
+    background: #fff;
     border: #e0e0e0 1px solid;
     text-align: left;
   }

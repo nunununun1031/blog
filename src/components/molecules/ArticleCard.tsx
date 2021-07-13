@@ -11,7 +11,7 @@ import {
 import styles from "./ArticleCard.module.scss";
 import { Article } from "../../types/article";
 import { useDispatch } from "react-redux";
-import { countUp, handleEdit, selectArticle } from "../../features/article/articleSlice";
+import { goodCountUp, handleEdit, selectArticle } from "../../features/article/articleSlice";
 
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import ShareIcon from "@material-ui/icons/Share";
@@ -36,11 +36,19 @@ const ArticleCard: React.FC<Props> = (props) => {
       good: good,
     }))
     dispatch(handleEdit(false))
-    history.push("/browsing")
+    history.push(`/browsing/${id}`)
   }
 
   const goodCount = () => {
-    dispatch(countUp(id));
+    dispatch(goodCountUp({
+      id: id,
+      img: img,
+      title: title,
+      text: text,
+      createdAt: createdAt,
+      updateTime: updateTime,
+      good: good,
+    }));
   };
   return (
     <Card className={styles.card}>
