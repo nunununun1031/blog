@@ -20,7 +20,7 @@
     }
   ],
   "login": {
-    "isAdmin": false,
+    "isAdmin": true,
     "password": "AdminIsMe"
   }
 }
