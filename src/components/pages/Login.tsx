@@ -18,18 +18,24 @@ const Login = () => {
     const [password, setPassword] = useState("")
 
     const checkPassword = async() => {
+        if(password === loginValue.password) {
+            await dispatch(changeAdmin({isAdmin: true, password: "AdminIsMe"}));
+            setPassword("")
+            history.push("/")
+        } else {
+            setPassword("")
+            alert("パスワードが違います。再度入力してください。")
+        }
+    }
+
+    const checkLogin = async() => {
         if(loginValue.isAdmin === false) {
-            if(password === loginValue.password) {
-                await dispatch(changeAdmin({isAdmin: true, password: "AdminIsMe"}));
-            } else {
-                setPassword("")
-                alert("パスワードが違います。再度入力してください。")
-            }
+            await checkPassword();
         } else {
             await dispatch(changeAdmin({isAdmin: false, password: "AdminIsMe"}))
+            setPassword("")
+            history.push("/")
         }
-        setPassword("")
-        history.push("/")
     }
 
     return (
@@ -41,19 +47,9 @@ const Login = () => {
             </Typography>
 
             {loginValue.isAdmin === false ? (
-                <TextField
-                    label="パスワード"
-                    variant="outlined"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-            ) : ""
-            }
-            <Button
-                variant="contained"
-                color="primary"
-                onClick={checkPassword}
-            >
+                <TextField label="パスワード" variant="outlined" value={password} onChange={(e) => setPassword(e.target.value)}/>
+            ) : ""}
+            <Button variant="contained" color="primary" onClick={checkLogin}>
             {loginValue.isAdmin === false ? "ログイン" : "ログアウト"}
             </Button>
             </div>

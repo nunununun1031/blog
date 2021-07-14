@@ -16,7 +16,6 @@ export const getLogin = createAsyncThunk(
     'login/getLogin',
     async () => {
       const response = await axios.get("http://localhost:3001/login");
-      // return {responseItems: response};
       return response.data;
     }
 );
@@ -33,8 +32,8 @@ export const getLogin = createAsyncThunk(
 // })
 // isAdminの値を更新
 export const changeAdmin = createAsyncThunk("login/changeAdmin", async (value: Login) => {
-    const response = await axios.patch("http://localhost:3001/login", value);
-    return response.data;
+    const response = await axios.put("http://localhost:3001/login", value);
+    return response.data.isAdmin;
 })
 
 
@@ -46,7 +45,7 @@ export const loginSlice = createSlice({
     builder
     .addCase(getLogin.fulfilled, (state, action) => {
         state = action.payload
-      })
+    })
     // .addCase(loginAdmin.fulfilled, (state, action) => {
     //     state = action.payload
     // })
@@ -54,7 +53,6 @@ export const loginSlice = createSlice({
     //     state = action.payload
     // })
     .addCase(changeAdmin.fulfilled, (state, action) => {
-        // state = action.payload
         return {
             ...state,
             isAdmin: action.payload
@@ -63,7 +61,7 @@ export const loginSlice = createSlice({
   },
 });
 
-export const {} = loginSlice.actions;
+// export const {} = loginSlice.actions;
 
 export const selectLogin = (state: any) => state.login;
 

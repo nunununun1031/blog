@@ -20,9 +20,7 @@ const Header = () => {
   return (
     <div className={styles.header}>
       <Link to="/" className={styles.title}>
-        <Typography variant="h3">
-        Home
-        </Typography>
+        <Typography variant="h3">Home</Typography>
         </Link>
       <div>
       <Button
