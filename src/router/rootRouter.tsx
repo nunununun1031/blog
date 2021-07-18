@@ -5,7 +5,7 @@ import Home from "../components/pages/Home";
 import Page404 from "../components/pages/Page404";
 import Writing from "../components/pages/Writing";
 import Login from "../components/pages/Login";
-import { Paths } from "./Paths";
+import { Paths } from "./rootPaths";
 
 const Router = () => {
   return (
